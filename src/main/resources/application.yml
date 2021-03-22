@@ -1,0 +1,15 @@
+# Spring JPA Configuration
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/univer_db
+    username: postgres
+    password: 12345
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate.ddl-auto: validate
+
+# Base API path
+application:
+  api:
+    path: "api"

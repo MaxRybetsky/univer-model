@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "application.api.path",
+      "type": "java.lang.String",
+      "description": "Base application API path."
+    }
+  ]
+}
