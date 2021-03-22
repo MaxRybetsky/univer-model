@@ -6,8 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -29,5 +29,5 @@ public class Student {
     private String lastName;
 
     @OneToMany(mappedBy = "student")
-    private List<TeacherStudent> teachers = new ArrayList<>();
+    private Set<TeacherStudent> teachers = new HashSet<>();
 }

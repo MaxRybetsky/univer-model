@@ -32,14 +32,12 @@ public class StudentController {
 
     @PostMapping
     public Student addStudent(@RequestBody Student student) {
-        studentService.saveStudent(student);
-        return student;
+        return studentService.saveStudent(student);
     }
 
     @PutMapping
     public Student updateStudent(@RequestBody Student student) {
-        studentService.saveStudent(student);
-        return student;
+        return studentService.saveStudent(student);
     }
 
     @DeleteMapping("/{id}")

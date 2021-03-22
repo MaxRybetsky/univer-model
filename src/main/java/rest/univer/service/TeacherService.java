@@ -5,7 +5,7 @@ import rest.univer.domain.Teacher;
 import java.util.Optional;
 
 public interface TeacherService {
-    void saveTeacher(Teacher teacher);
+    Teacher saveTeacher(Teacher teacher);
 
     void deleteTeacherById(Long id);
 

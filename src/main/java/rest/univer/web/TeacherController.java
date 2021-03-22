@@ -32,14 +32,12 @@ public class TeacherController {
 
     @PostMapping
     public Teacher addTeacher(@RequestBody Teacher teacher) {
-        teacherService.saveTeacher(teacher);
-        return teacher;
+        return teacherService.saveTeacher(teacher);
     }
 
     @PutMapping
     public Teacher updateTeacher(@RequestBody Teacher teacher) {
-        teacherService.saveTeacher(teacher);
-        return teacher;
+        return teacherService.saveTeacher(teacher);
     }
 
     @DeleteMapping("/{id}")

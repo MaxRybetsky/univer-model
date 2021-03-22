@@ -5,7 +5,7 @@ import rest.univer.domain.Student;
 import java.util.Optional;
 
 public interface StudentService {
-    void saveStudent(Student student);
+    Student saveStudent(Student student);
 
     void deleteStudentById(Long id);
 
