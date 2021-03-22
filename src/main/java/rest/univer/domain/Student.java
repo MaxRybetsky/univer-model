@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,5 +29,5 @@ public class Student {
     private String lastName;
 
     @OneToMany(mappedBy = "student")
-    private List<TeacherStudent> teachers;
+    private List<TeacherStudent> teachers = new ArrayList<>();
 }
