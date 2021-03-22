@@ -12,4 +12,4 @@ spring:
 # Base API path
 application:
   api:
-    path: "api"
+    path: api
