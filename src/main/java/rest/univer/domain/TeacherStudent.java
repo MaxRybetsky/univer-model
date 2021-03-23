@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -21,8 +22,22 @@ public class TeacherStudent {
     @ManyToOne
     private Teacher teacher;
 
-    public TeacherStudent(Student student, Teacher teacher) {
-        this.student = student;
+    public TeacherStudent(Teacher teacher, Student student) {
         this.teacher = teacher;
+        this.student = student;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TeacherStudent that = (TeacherStudent) o;
+        return Objects.equals(student.getId(), that.student.getId())
+                && Objects.equals(teacher.getId(), that.teacher.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(student.getId(), teacher.getId());
     }
 }

@@ -1,5 +1,6 @@
 package rest.univer.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,10 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(
-        includeFieldNames = false,
-        exclude = {"id"}
-)
+@ToString(includeFieldNames = false)
 public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,5 +27,6 @@ public class Teacher {
     private String lastName;
 
     @OneToMany(mappedBy = "teacher")
+    @JsonIgnore
     private Set<TeacherStudent> students = new HashSet<>();
 }
