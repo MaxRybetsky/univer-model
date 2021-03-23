@@ -5,20 +5,20 @@ import org.springframework.web.bind.annotation.*;
 import rest.univer.domain.Student;
 import rest.univer.exceptions.NoSuchPersonException;
 import rest.univer.service.StudentService;
+import rest.univer.service.TeacherService;
 
 @RestController
 @RequestMapping("/${application.api.path}/students")
 public class StudentController extends BaseApiController {
-    private final StudentService studentService;
 
     @Autowired
-    public StudentController(StudentService studentService) {
-        this.studentService = studentService;
+    public StudentController(StudentService studentService, TeacherService teacherService) {
+        super(studentService, teacherService);
     }
 
     @GetMapping
     public Iterable<Student> getAllStudents() {
-        return studentService.findAllStudents();
+        return getStudentService().findAllStudents();
     }
 
     @GetMapping("/{id}")
@@ -28,28 +28,18 @@ public class StudentController extends BaseApiController {
 
     @PostMapping
     public Student addStudent(@RequestBody Student student) {
-        return studentService.saveStudent(student);
+        return getStudentService().saveStudent(student);
     }
 
     @PutMapping
     public Student updateStudent(@RequestBody Student student) {
-        return studentService.saveStudent(student);
+        return getStudentService().saveStudent(student);
     }
 
     @DeleteMapping("/{id}")
     public String deleteStudent(@PathVariable Long id) {
         getStudentByIdOrThrowAnException(id);
-        studentService.deleteStudentById(id);
+        getStudentService().deleteStudentById(id);
         return "Student with " + id + " was deleted!";
-    }
-
-    private Student getStudentByIdOrThrowAnException(Long id) {
-        Student student = studentService.findStudentById(id).orElse(null);
-        if (student == null) {
-            throw new NoSuchPersonException(
-                    String.format("There is no student with id=%d", id)
-            );
-        }
-        return student;
     }
 }
