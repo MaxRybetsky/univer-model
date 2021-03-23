@@ -1,17 +1,12 @@
 package rest.univer.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import rest.univer.domain.Student;
 import rest.univer.exceptions.NoSuchPersonException;
-import rest.univer.exceptions.PersonIncorrectData;
 import rest.univer.repository.StudentRepository;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -30,19 +25,30 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public void deleteStudentById(Long id) {
+    public void deleteStudentById(Long id) throws NoSuchPersonException {
+        getStudentByIdOrThrowAnException(id);
         studentRepository.deleteById(id);
     }
 
     @Override
     @Transactional
-    public Optional<Student> findStudentById(Long id) {
-        return studentRepository.findById(id);
+    public Student findStudentById(Long id) throws NoSuchPersonException {
+        return getStudentByIdOrThrowAnException(id);
     }
 
     @Override
     @Transactional
     public Iterable<Student> findAllStudents() {
         return studentRepository.findAll();
+    }
+
+    private Student getStudentByIdOrThrowAnException(Long id) throws NoSuchPersonException {
+        Student student = studentRepository.findById(id).orElse(null);
+        if (student == null) {
+            throw new NoSuchPersonException(
+                    String.format("There is no student with id=%d", id)
+            );
+        }
+        return student;
     }
 }

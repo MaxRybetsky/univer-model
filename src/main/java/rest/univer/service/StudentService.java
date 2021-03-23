@@ -1,15 +1,14 @@
 package rest.univer.service;
 
 import rest.univer.domain.Student;
-
-import java.util.Optional;
+import rest.univer.exceptions.NoSuchPersonException;
 
 public interface StudentService {
     Student saveStudent(Student student);
 
-    void deleteStudentById(Long id);
+    void deleteStudentById(Long id) throws NoSuchPersonException;
 
-    Optional<Student> findStudentById(Long id);
+    Student findStudentById(Long id) throws NoSuchPersonException;
 
     Iterable<Student> findAllStudents();
 }

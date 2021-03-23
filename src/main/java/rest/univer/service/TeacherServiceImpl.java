@@ -3,10 +3,10 @@ package rest.univer.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rest.univer.domain.Teacher;
+import rest.univer.exceptions.NoSuchPersonException;
 import rest.univer.repository.TeacherRepository;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
@@ -25,14 +25,15 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     @Transactional
-    public void deleteTeacherById(Long id) {
+    public void deleteTeacherById(Long id) throws NoSuchPersonException {
+        getTeacherByIdOrThrowAnException(id);
         teacherRepository.deleteById(id);
     }
 
     @Override
     @Transactional
-    public Optional<Teacher> findTeacherById(Long id) {
-        return teacherRepository.findById(id);
+    public Teacher findTeacherById(Long id) throws NoSuchPersonException {
+        return getTeacherByIdOrThrowAnException(id);
     }
 
     @Override
@@ -41,4 +42,13 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherRepository.findAll();
     }
 
+    private Teacher getTeacherByIdOrThrowAnException(Long id) throws NoSuchPersonException {
+        Teacher teacher = teacherRepository.findById(id).orElse(null);
+        if (teacher == null) {
+            throw new NoSuchPersonException(
+                    String.format("There is no teacher with id=%d", id)
+            );
+        }
+        return teacher;
+    }
 }
