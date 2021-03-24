@@ -20,6 +20,10 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public Student saveStudent(Student student) {
+        Long studentId = student.getId();
+        if(studentId != null) {
+            getStudentByIdOrThrowAnException(studentId);
+        }
         return studentRepository.save(student);
     }
 

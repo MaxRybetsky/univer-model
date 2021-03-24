@@ -20,6 +20,10 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     @Transactional
     public Teacher saveTeacher(Teacher teacher) {
+        Long teacherId = teacher.getId();
+        if(teacherId != null) {
+            getTeacherByIdOrThrowAnException(teacherId);
+        }
         return teacherRepository.save(teacher);
     }
 
