@@ -3,7 +3,9 @@ package rest.univer.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import rest.univer.domain.Student;
+import rest.univer.domain.Teacher;
 import rest.univer.service.StudentService;
+import rest.univer.service.TeacherStudentService;
 
 @RestController
 @RequestMapping("/${application.api.path}/students")
@@ -11,7 +13,9 @@ public class StudentController extends BaseApiController {
     private final StudentService studentService;
 
     @Autowired
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService,
+                             TeacherStudentService teacherStudentService) {
+        super(teacherStudentService);
         this.studentService = studentService;
     }
 
@@ -41,5 +45,8 @@ public class StudentController extends BaseApiController {
         return "Student with " + id + " was deleted!";
     }
 
-
+    @GetMapping("/{studentId}/teachers")
+    public Iterable<Teacher> getStudents(@PathVariable Long studentId) {
+        return getTeacherStudentService().getTeachersFromStudent(studentId);
+    }
 }

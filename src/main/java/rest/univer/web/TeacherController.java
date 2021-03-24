@@ -4,23 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import rest.univer.domain.Student;
 import rest.univer.domain.Teacher;
-import rest.univer.domain.TeacherStudent;
-import rest.univer.exceptions.NoSuchPersonException;
-import rest.univer.service.StudentService;
 import rest.univer.service.TeacherService;
 import rest.univer.service.TeacherStudentService;
-
-import java.util.Set;
 
 @RestController
 @RequestMapping("/${application.api.path}/teachers")
 public class TeacherController extends BaseApiController {
     private final TeacherService teacherService;
-    @Autowired
-    private TeacherStudentService teacherStudentService;
 
     @Autowired
-    public TeacherController(TeacherService teacherService) {
+    public TeacherController(TeacherService teacherService,
+                             TeacherStudentService teacherStudentService) {
+        super(teacherStudentService);
         this.teacherService = teacherService;
     }
 
@@ -55,7 +50,7 @@ public class TeacherController extends BaseApiController {
             @PathVariable(name = "teacherId") Long teacherId,
             @PathVariable(name = "studentId") Long studentId
     ) {
-        boolean success = teacherStudentService.addStudentToTeacher(studentId, teacherId);
+        boolean success = getTeacherStudentService().addStudentToTeacher(studentId, teacherId);
         String resultMessage;
         if (!success) {
             resultMessage = "Student with id = %d has been already added to teacher with id = %d." +
@@ -68,8 +63,26 @@ public class TeacherController extends BaseApiController {
         );
     }
 
+    @DeleteMapping("/{teacherId}/students/{studentId}")
+    public String deleteStudentFromTeacher(
+            @PathVariable(name = "teacherId") Long teacherId,
+            @PathVariable(name = "studentId") Long studentId
+    ) {
+        boolean success = getTeacherStudentService().deleteStudentFromTeacher(studentId, teacherId);
+        String resultMessage;
+        if (!success) {
+            resultMessage = "Student with id = %d has been already removed from teacher with id = %d." +
+                    " You can add this student to or try to remove another student from this teacher.";
+        } else {
+            resultMessage = "Student with id = %d successfully removed from teacher with id = %d.";
+        }
+        return String.format(
+                resultMessage, studentId, teacherId
+        );
+    }
+
     @GetMapping("/{teacherId}/students/")
     public Iterable<Student> getStudents(@PathVariable Long teacherId) {
-        return teacherStudentService.getStudentsFromTeacher(teacherId);
+        return getTeacherStudentService().getStudentsFromTeacher(teacherId);
     }
 }

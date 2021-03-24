@@ -29,7 +29,14 @@ public class TeacherStudentServiceImpl implements TeacherStudentService {
     @Override
     @Transactional
     public boolean addStudentToTeacher(Long studentId, Long teacherId) {
-        return false;
+        Student student = studentService.findStudentById(studentId);
+        Teacher teacher = teacherService.findTeacherById(teacherId);
+        TeacherStudent teacherStudent = new TeacherStudent(teacher, student);
+        if (teacher.getStudents().contains(teacherStudent)) {
+            return false;
+        }
+        teacherStudentRepository.save(teacherStudent);
+        return true;
     }
 
     @Override
@@ -41,7 +48,7 @@ public class TeacherStudentServiceImpl implements TeacherStudentService {
         if (!teacher.getStudents().contains(teacherStudent)) {
             return false;
         }
-        teacherStudentRepository.save(teacherStudent);
+        teacherStudentRepository.deleteByTeacherIdAndStudentId(teacher.getId(), student.getId());
         return true;
     }
 
@@ -58,6 +65,10 @@ public class TeacherStudentServiceImpl implements TeacherStudentService {
     @Override
     @Transactional
     public Iterable<Teacher> getTeachersFromStudent(Long studentId) {
-        return null;
+        Student student = studentService.findStudentById(studentId);
+        return student.getTeachers().stream()
+                .map(TeacherStudent::getTeacher)
+                .sorted(Comparator.comparingLong(Teacher::getId))
+                .collect(Collectors.toList());
     }
 }
