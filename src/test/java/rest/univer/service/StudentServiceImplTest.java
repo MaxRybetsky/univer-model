@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import rest.univer.domain.Student;
 import rest.univer.exceptions.NoSuchPersonException;
 import rest.univer.repository.StudentRepository;
+import rest.univer.util.CompareHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,22 +135,9 @@ public class StudentServiceImplTest {
         studentList.add(student3);
         when(studentRepository.findAll())
                 .thenReturn(studentList);
-        List<Student> foundStudents = (List<Student>)studentService.findAllStudents();
-        // Check 1st Student
-        assertThat(foundStudents.get(0).getId())
-                .isSameAs(student1.getId());
-        assertThat(foundStudents.get(0).getFirstName())
-                .isSameAs(student1.getFirstName());
-        // Check 2nd Student
-        assertThat(foundStudents.get(1).getId())
-                .isSameAs(student2.getId());
-        assertThat(foundStudents.get(1).getFirstName())
-                .isSameAs(student2.getFirstName());
-        // Check 3rd Student
-        assertThat(foundStudents.get(2).getId())
-                .isSameAs(student3.getId());
-        assertThat(foundStudents.get(2).getFirstName())
-                .isSameAs(student3.getFirstName());
+        Iterable<Student> foundStudents = studentService.findAllStudents();
+        boolean result = CompareHelper.haveSameElements(foundStudents, studentList);
+        assertThat(result).isTrue();
         verify(studentRepository).findAll();
     }
 }
